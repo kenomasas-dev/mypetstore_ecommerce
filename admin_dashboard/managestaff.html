@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Staff</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        .form-container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 450px;
+            width: 100%;
+            margin: 20px auto;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-container h3 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #343a40;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #009879;
+            box-shadow: 0 0 5px rgba(0, 152, 121, 0.5);
+        }
+
+        .btn-primary {
+            background-color: #009879;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #007f63;
+            transform: translateY(-2px);
+        }
+
+        .alert {
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        /* Modal Animation */
+        .modal.fade .modal-dialog {
+            transform: translateY(-50px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .modal.show .modal-dialog {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Enhanced Table Styling */
+        #staffTable {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            background: white;
+        }
+
+        #staffTable thead {
+            background-color: #009879;
+            color: white;
+        }
+
+        #staffTable th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 16px;
+            border: none;
+        }
+
+        #staffTable td {
+            padding: 15px;
+            border-bottom: 1px solid #f2f2f2;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        #staffTable tbody tr {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        #staffTable tbody tr:hover {
+            background-color: #f9f9f9;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        #staffTable tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Table Row Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-row {
+            animation: fadeInUp 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        /* Table Container Animation */
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.6s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .table-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: #009879;
+        }
+
+        .table-container h3 {
+            color: #343a40;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        .table-container h3::before {
+            content: "\f0ae";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            margin-right: 10px;
+            color: #009879;
+        }
+
+        /* Empty State Animation */
+        .empty-state {
+            text-align: center;
+            padding: 40px 0;
+            color: #6c757d;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #dee2e6;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Search and Filter Controls */
+        .table-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 300px;
+            width: 100%;
+        }
+
+        .search-container input {
+            padding-left: 40px;
+            border-radius: 50px;
+            border: 1px solid #ddd;
+            padding: 10px 15px 10px 40px;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .search-container input:focus {
+            box-shadow: 0 0 5px rgba(0, 152, 121, 0.5);
+            border-color: #009879;
+        }
+
+        .search-container i {
+            position: absolute;
+            left: 15px;
+            top: 12px;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <div class="text-center py-3">
+            <img src="mypetstorelogo.png" alt="Logo" width="80" height="80">
+            <h5 class="mt-2">Admin Panel</h5>
+        </div>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="admin.html"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="viewproduct.html">
+                    <i class="fas fa-box me-2"></i> Products
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="recentorders.php">
+                    <i class="fas fa-shopping-cart me-2"></i>Orders
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="reports.html"><i class="fas fa-file-alt"></i> Reports</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#manageStaffModal">
+                    <i class="fas fa-user-tie me-2"></i> Manage Staff
+                </a>
+            </li>
+            
+            
+            <li class="nav-item">
+                <a class="nav-link" href="login.html"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content" style="margin-left: 270px; width: calc(100% - 270px);">
+        <div class="container mt-4">
+            <div class="table-container">
+                <h3><i class="fas fa-users me-2"></i>Staff List</h3>
+                
+                <div class="table-controls">
+                    <div class="search-container">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="staffSearch" class="form-control" placeholder="Search staff...">
+                    </div>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#manageStaffModal">
+                        <i class="fas fa-plus me-2"></i>Add New Staff
+                    </button>
+                </div>
+                
+                <table id="staffTable" class="table">
+                    <thead>
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Role</th>
+                         
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Staff data will be loaded here dynamically -->
+                    </tbody>
+                </table>
+                
+                <div id="emptyState" class="empty-state" style="display: none;">
+                    <i class="fas fa-users"></i>
+                    <h5>No Staff Found</h5>
+                    <p>Add new staff members to get started.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manage Staff Modal -->
+    <div class="modal fade" id="manageStaffModal" tabindex="-1" aria-labelledby="manageStaffModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="manageStaffModalLabel">Add New Staff</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="staffForm">
+                        <div class="mb-3">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter first name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter last name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter phone number" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Role</label>
+                            <select class="form-control" id="role" name="role" required>
+                                <option value="">Select Role</option>
+                                <option value="Manager">Manager</option>
+                       
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Add Staff</button>
+                    </form>
+                    <div id="responseMessage" class="mt-3 text-center"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Load staff data when the page loads
+            loadStaffData();
+    
+            // Function to load staff data
+            function loadStaffData() {
+                $.ajax({
+                    url: "fetch_staff.php",
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        var tableBody = $("#staffTable tbody");
+                        tableBody.empty(); // Clear existing data
+    
+                        if (data.length > 0) {
+                            $("#emptyState").hide();
+                            data.forEach(function (staff, index) {
+                                var row = `<tr class="fade-in-row" style="animation-delay: ${index * 0.1}s">
+                                    <td>${staff.first_name}</td>
+                                    <td>${staff.last_name}</td>
+                                    <td>${staff.email}</td>
+                                    <td>${staff.phone}</td>
+                                    <td><span class="badge bg-${getRoleBadgeColor(staff.role)}">${staff.role}</span></td>
+                                   
+                                </tr>`;
+                                tableBody.append(row);
+                            });
+                        } else {
+                            $("#emptyState").show();
+                        }
+                    },
+                    error: function () {
+                        $("#staffTable tbody").html('<tr><td colspan="6" class="text-center">Error loading staff data.</td></tr>');
+                        $("#emptyState").hide();
+                    }
+                });
+            }
+
+            // Function to determine badge color based on role
+            function getRoleBadgeColor(role) {
+                switch(role) {
+                    case 'Manager': return 'primary';
+                    case 'Admin': return 'danger';
+                    case 'Staff': return 'success';
+                    default: return 'secondary';
+                }
+            }
+    
+            // Handle form submission for adding staff
+            $("#staffForm").submit(function (e) {
+                e.preventDefault(); // Prevent default form submission
+    
+                // Show loading state
+                const submitBtn = $(this).find('button[type="submit"]');
+                const originalBtnText = submitBtn.html();
+                submitBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...');
+                submitBtn.prop('disabled', true);
+                
+                $.ajax({
+                    url: "add_staff.php",
+                    type: "POST",
+                    data: $(this).serialize(), // Send form data
+                    dataType: "json",
+                    success: function (response) {
+                        $("#responseMessage").html(`<div class="alert alert-${response.status === 'success' ? 'success' : 'danger'}">${response.message}</div>`);
+                        if (response.status === "success") {
+                            $("#staffForm")[0].reset(); // Reset form on success
+                            
+                            // Add success animation
+                            if (response.status === "success") {
+                                let successAnimation = $('<div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style="background-color: rgba(255,255,255,0.8); z-index: 1050;"><div class="text-center"><i class="fas fa-check-circle text-success" style="font-size: 50px;"></i><h4 class="mt-3">Staff Added Successfully!</h4></div></div>');
+                                $(".modal-content").append(successAnimation);
+                                
+                                setTimeout(function() {
+                                    successAnimation.fadeOut(300, function() {
+                                        $(this).remove();
+                                        $('#manageStaffModal').modal('hide');
+                                    });
+                                    loadStaffData(); // Reload staff data
+                                }, 1500);
+                            }
+                        }
+                        
+                        // Reset button state
+                        submitBtn.html(originalBtnText);
+                        submitBtn.prop('disabled', false);
+                    },
+                    error: function () {
+                        $("#responseMessage").html('<div class="alert alert-danger">An error occurred.</div>');
+                        
+                        // Reset button state
+                        submitBtn.html(originalBtnText);
+                        submitBtn.prop('disabled', false);
+                    }
+                });
+            });
+            
+            // Search functionality
+            $("#staffSearch").on("keyup", function() {
+                let value = $(this).val().toLowerCase();
+                $("#staffTable tbody tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+                
+                // Show empty state if no matching results
+                if ($("#staffTable tbody tr:visible").length === 0) {
+                    $("#emptyState").show();
+                } else {
+                    $("#emptyState").hide();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

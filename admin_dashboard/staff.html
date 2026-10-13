@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Staff Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css"> <!-- Updated path -->
+</head>
+<body>
+
+    <div id="sidebar">
+        <div class="text-center py-3">
+            <img src="mypetstorelogo.png" alt="Logo" width="80" height="80"> <!-- Updated path -->
+            <h5 class="mt-2">Staff Panel</h5>
+        </div>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="staffdashboard.html"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-box me-2"></i> Products
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="staffaddprouct.html">Add Product</a></li>
+                    <li><a class="dropdown-item" href="staffviewproduct.html">View Product</a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="orders.html" id="ordersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-shopping-cart me-2"></i> Orders
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="ordersDropdown">
+                    <li><a class="dropdown-item" href="staffvieworders.php">View Orders</a></li>
+                    <li><a class="dropdown-item" href="staffrecentorders.php">Recent Orders</a></li>
+                </ul>
+            </li> 
+            <li class="nav-item">
+                <a class="nav-link" href="settings.html"><i class="fa fa-cog"></i> Settings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="customer.php"><i class="fas fa-users me-2"></i> Customers</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../login.html"><i class="fas fa-sign-out-alt me-2"></i> Logout</a> <!-- Updated path -->
+            </li>
+        </ul>
+    </div>
+
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

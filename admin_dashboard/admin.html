@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+
+        body{
+            overflow: hidden;
+        }
+        .dashboard-card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            height: 100%;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card {
+            padding: 20px;
+            color: white;
+        }
+        
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        
+        #loadingOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <div id="sidebar">
+        <div class="text-center py-3">
+            <img src="mypetstorelogo.png" alt="Logo" width="80" height="80">
+            <h5 class="mt-2">Admin Panel</h5>
+        </div>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="admin.html"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="viewproduct.html">
+                    <i class="fas fa-box me-2"></i> Products
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="recentorders.php">
+                    <i class="fas fa-shopping-cart me-2"></i>Orders
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="reports.html"><i class="fas fa-file-alt"></i>  Reports</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="managestaff.html"><i class="fas fa-user-tie me-2"></i> Manage Staff</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="admin_login.html"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
+            </li>
+        </ul>
+    </div>
+
+    <div id="content" class="p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>
+                <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+            </h1>
+            <div>
+                <span class="me-2">Welcome, Admin!</span>
+                <button class="btn btn-sm btn-outline-secondary">
+                    <i class="fas fa-sync-alt" id="refreshData"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Stats Cards Row -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="dashboard-card stat-card bg-primary">
+                    <div class="stat-icon">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <h3 class="mb-0" id="totalProducts">0</h3>
+                    <p class="mb-0">Total Products</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="dashboard-card stat-card bg-success">
+                    <div class="stat-icon">
+                        <i class="fas fa-peso-sign"></i>
+                    </div>
+                    <h3 class="mb-0" id="monthlyRevenue">₱0</h3>
+                    <p class="mb-0">Monthly Revenue</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="dashboard-card stat-card bg-warning">
+                    <div class="stat-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <h3 class="mb-0" id="newOrders">0</h3>
+                    <p class="mb-0">New Orders</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="dashboard-card stat-card bg-danger">
+                    <div class="stat-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3 class="mb-0" id="lowStock">0</h3>
+                    <p class="mb-0">Low Stock Items</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="row mb-4">
+            <div class="col-md-8 mb-3">
+                <div class="dashboard-card p-3">
+                    <h5 class="card-title">Monthly Sales</h5>
+                    <div class="chart-container">
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="dashboard-card p-3">
+                    <h5 class="card-title">Product Categories</h5>
+                    <div class="chart-container">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Charts variables
+        let salesChart;
+        let categoryChart;
+
+        // Initialize charts with empty data
+        function initCharts() {
+            // Sales Chart
+            const salesCtx = document.getElementById('salesChart').getContext('2d');
+            salesChart = new Chart(salesCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Sales 2025',
+                        data: [],
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        tension: 0.3,
+                        fill: true
+                    },
+                    {
+                        label: 'Sales 2024',
+                        data: [],
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Monthly Sales Comparison'
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' }).format(context.parsed.y);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '₱' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Category Chart
+            const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+            categoryChart = new Chart(categoryCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(255, 206, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(153, 102, 255, 0.8)',
+                            'rgba(255, 159, 64, 0.8)',
+                            'rgba(201, 203, 207, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(201, 203, 207, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = Math.round((value / total) * 100);
+                                    return label + ': ' + value + ' (' + percentage + '%)';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update charts and dashboard with data
+        function updateDashboard(data) {
+            // Update stats
+            if (data.stats) {
+                document.getElementById('totalProducts').textContent = data.stats.total_products || 0;
+                document.getElementById('monthlyRevenue').textContent = '' + (data.stats.monthly_revenue || 0).toLocaleString();
+                document.getElementById('newOrders').textContent = data.stats.new_orders || 0;
+                document.getElementById('lowStock').textContent = data.stats.low_stock || 0;
+            }
+
+            // Update sales chart
+            if (data.sales) {
+                salesChart.data.labels = data.sales.labels || [];
+                salesChart.data.datasets[0].data = data.sales.current_year || [];
+                salesChart.data.datasets[1].data = data.sales.previous_year || [];
+                salesChart.update();
+            }
+
+            // Update category chart
+            if (data.categories) {
+                categoryChart.data.labels = data.categories.labels || [];
+                categoryChart.data.datasets[0].data = data.categories.data || [];
+                categoryChart.update();
+            }
+        }
+
+        // Function to fetch data from PHP endpoint
+        function fetchDashboardData() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            
+            fetch('get_dashboard_data.php')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    updateDashboard(data);
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                })
+                .catch(error => {
+                    console.error('Error fetching dashboard data:', error);
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                    
+                    // Display error message or fallback to demo data
+                    alert('Error loading dashboard data. Please check your database connection.');
+                    
+                    // Load demo data as fallback
+                    loadDemoData();
+                });
+        }
+
+        // Load demo data if database connection fails
+        function loadDemoData() {
+            const demoData = {
+                stats: {
+                    total_products: 156,
+                    monthly_revenue: 8459,
+                    new_orders: 84,
+                    low_stock: 24
+                },
+                sales: {
+                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                    current_year: [5400, 6200, 7100, 8300, 7800, 8900, 8100, 9200, 9800, 8700, 9300, 10200],
+                    previous_year: [4500, 5500, 6300, 7200, 6800, 7500, 7200, 8100, 8500, 7600, 8200, 9100]
+                },
+                categories: {
+                    labels: ["Dog Food", "Cat Food", "Bird Food", "Toys", "Accessories", ],
+                    data: [20, 20, 20, 20, 20]
+                }
+            };
+            
+            updateDashboard(demoData);
+        }
+
+        // Initialize charts and fetch data when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+            fetchDashboardData();
+            
+            // Refresh button event listener
+            document.getElementById('refreshData').addEventListener('click', function() {
+                fetchDashboardData();
+            });
+        });
+
+        // Refresh data every 5 minutes
+        setInterval(fetchDashboardData, 300000);
+    </script>
+</body>
+</html>

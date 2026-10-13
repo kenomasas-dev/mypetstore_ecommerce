@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Products</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css"> <!-- Updated path -->
+    <style>
+        .fixed-header {
+            position: sticky;
+            top: 0;
+            background-color: #f8f9fa;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .search-container {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+        }
+        
+        .search-container input {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        
+        .search-container button {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div id="sidebar">
+    <div class="text-center py-3">
+        <img src="mypetstorelogo.png" alt="Logo" width="80" height="80">
+        <h5 class="mt-2">Admin Panel</h5>
+    </div>
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link" href="admin.html"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="viewproduct.html">
+                <i class="fas fa-box me-2"></i>Products
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="recentorders.php">
+                <i class="fas fa-shopping-cart me-2"></i>Orders
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="reports.html"><i class="fas fa-file-alt"></i> Reports</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="managestaff.html"><i class="fas fa-user-tie me-2"></i> Manage Staff</a> <!-- Updated path -->
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="login.html"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
+        </li>
+    </ul>
+</div>
+
+<!-- Main Content -->
+<div id="main-content" style="margin-left: 270px;">
+    
+    <!-- Fixed Header -->
+    <div class="fixed-header">
+        <h2>Product Management</h2>
+        <div class="action-buttons">
+            <div class="search-container">
+                <input type="text" id="searchInput" class="form-control" placeholder="Search products...">
+                <button id="searchButton" class="btn btn-primary"><i class="fas fa-search"></i></button>
+            </div>
+            <button id="addButton" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                <i class="fas fa-plus"></i> Add Product
+            </button>
+            
+            <button id="updateButton" class="btn btn-warning" disabled><i class="fas fa-edit"></i> Update</button>
+            <button id="deleteButton" class="btn btn-danger" disabled><i class="fas fa-trash-alt"></i> Delete</button>
+        </div>
+    </div>
+    
+    <div class="table-responsive mt-3">
+        <table class="table table-bordered" id="productTable">
+            <thead>
+                <tr>
+                    <th width="50px"><input type="checkbox" id="selectAll"></th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be populated dynamically by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="pagination-container">
+        <div class="btn-group" role="group">
+            <button id="prevBtn" class="btn btn-outline-primary" disabled><i class="fas fa-arrow-left"></i> Previous</button>
+            <button id="nextBtn" class="btn btn-outline-primary" disabled>Next <i class="fas fa-arrow-right"></i></button>
+        </div>
+    </div>
+</div>
+
+<!-- Update Product Modal -->
+<div class="modal fade" id="updateProductModal" tabindex="-1" aria-labelledby="updateProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateProductModalLabel">Update Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="updateProductForm">
+                    <input type="hidden" id="updateProductId">
+                    <div class="mb-3">
+                        <label for="updateProductName" class="form-label">Product Name</label>
+                        <input type="text" class="form-control" id="updateProductName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="updateCategory" class="form-label">Category</label>
+                        <select class="form-select" id="updateCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="Food">Food</option>
+                            <option value="Toys">Toys</option>
+                            <option value="Accessories">Accessories</option>
+                            <option value="Grooming">Grooming</option>
+                          
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="updatePrice" class="form-label">Price</label>
+                            <input type="number" class="form-control" id="updatePrice" step="0.01" min="0" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="updateStock" class="form-label">Stock</label>
+                            <input type="number" class="form-control" id="updateStock" min="0" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="updateProductImage" class="form-label">Current Image</label>
+                        <div>
+                            <img id="currentProductImage" src="" alt="Current Product Image" style="max-width: 200px; max-height: 200px; display: block; margin-bottom: 10px;">
+                        </div>
+                        <label for="updateNewImage" class="form-label">Upload New Image (Optional)</label>
+                        <input type="file" class="form-control" id="updateNewImage" accept="image/*">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveProductChanges">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+ <!-- Add Product Modal -->
+ <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="productForm" action="add_product.php" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label for="productName" class="form-label">Product Name</label>
+                        <input list="productList" class="form-control" id="productName" name="productName" required>
+                        <datalist id="productList">
+                            <option value="Dog Food">
+                            <option value="Cat Food">
+                            <option value="Bird Food">
+                        </datalist>
+                        <div class="invalid-feedback">Please enter a product name.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productCategory" class="form-label">Category</label>
+                        <select class="form-select" id="productCategory" name="productCategory" required>
+                            <option value="">Select a category</option>
+                            <option value="food">Pet Food</option>
+                            <option value="toys">Toys</option>
+                            <option value="accessories">Accessories</option>
+                            <option value="Pet">Pet</option>
+                        </select>
+                        <div class="invalid-feedback">Please select a category.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productPrice" class="form-label">Price</label>
+                        <input type="number" class="form-control" id="productPrice" name="productPrice" step="0.01" required>
+                        <div class="invalid-feedback">Please enter a valid price.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productStock" class="form-label">How many in stock?</label>
+                        <input type="number" class="form-control" id="productStock" name="productStock" required>
+                        <div class="invalid-feedback">Please enter the stock quantity.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="productDescription" name="productDescription" rows="3"></textarea>
+                        <div class="invalid-feedback">Please enter a description.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productImage" class="form-label">Product Image</label>
+                        <input type="file" class="form-control" id="productImage" name="productImage" accept="image/*" required>
+                        <div class="invalid-feedback">Please upload an image.</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add Product</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Form validation
+(function () {
+    'use strict';
+    var forms = document.querySelectorAll('.needs-validation');
+    Array.prototype.slice.call(forms).forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+})();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Global variables for pagination
+    const productsPerPage = 10;
+    let currentPage = 1;
+    let allProducts = [];
+    let filteredProducts = [];
+    let updateProductModal;
+    
+    // Function to load products for the current page
+    function loadProducts(products) {
+        const tableBody = document.querySelector('#productTable tbody');
+        tableBody.innerHTML = ''; // Clear existing rows
+        
+        // Calculate start and end index for current page
+        const startIndex = (currentPage - 1) * productsPerPage;
+        const endIndex = Math.min(startIndex + productsPerPage, products.length);
+        
+        // Get products for current page
+        const currentProducts = products.slice(startIndex, endIndex);
+        
+        if (currentProducts.length > 0) {
+            currentProducts.forEach(product => {
+                const row = document.createElement('tr');
+                row.setAttribute('data-id', product.id || '');
+                row.innerHTML = `
+                    <td><input type="checkbox" class="product-checkbox"></td>
+                    <td>${product.product_name}</td>
+                    <td>${product.category}</td>
+                    <td>${product.price}</td>
+                    <td>${product.stock}</td>
+                    <td><img src="${product.image_url}" alt="Product Image" style="max-width: 100px; max-height: 100px;"></td>
+                `;
+                tableBody.appendChild(row);
+            });
+            
+            // Update pagination buttons
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = endIndex >= products.length;
+            
+        } else {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td colspan="7">No products found.</td>`;
+            tableBody.appendChild(row);
+            
+            // Disable pagination buttons
+            document.getElementById('prevBtn').disabled = true;
+            document.getElementById('nextBtn').disabled = true;
+        }
+        
+        // Reset checkboxes and update action buttons
+        document.getElementById('selectAll').checked = false;
+        updateActionButtons();
+    }
+    
+    // Function to update action buttons based on selection
+    function updateActionButtons() {
+        const selectedCheckboxes = document.querySelectorAll('.product-checkbox:checked');
+        const updateButton = document.getElementById('updateButton');
+        const deleteButton = document.getElementById('deleteButton');
+        
+        if (selectedCheckboxes.length === 1) {
+            // Enable both buttons when exactly one item is selected
+            updateButton.disabled = false;
+            deleteButton.disabled = false;
+        } else if (selectedCheckboxes.length > 1) {
+            // Enable only delete button when multiple items are selected
+            updateButton.disabled = true;
+            deleteButton.disabled = false;
+        } else {
+            // Disable both buttons when no items are selected
+            updateButton.disabled = true;
+            deleteButton.disabled = true;
+        }
+    }
+    
+    // Search function
+    function searchProducts() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+        
+        if (searchTerm === '') {
+            // If search is empty, show all products
+            filteredProducts = [...allProducts];
+        } else {
+            // Filter products based on search term
+            filteredProducts = allProducts.filter(product => {
+                return (
+                    product.product_name.toLowerCase().includes(searchTerm) ||
+                    product.category.toLowerCase().includes(searchTerm) ||
+                    product.price.toString().includes(searchTerm) ||
+                    product.stock.toString().includes(searchTerm)
+                );
+            });
+        }
+        
+        // Reset to first page and load filtered products
+        currentPage = 1;
+        loadProducts(filteredProducts);
+    }
+    
+    // Function to populate update modal with product data
+    function populateUpdateModal(productId) {
+        const product = allProducts.find(p => p.id == productId);
+        
+        if (product) {
+            document.getElementById('updateProductId').value = product.id;
+            document.getElementById('updateProductName').value = product.product_name;
+            document.getElementById('updateCategory').value = product.category;
+            document.getElementById('updatePrice').value = product.price;
+            document.getElementById('updateStock').value = product.stock;
+            document.getElementById('currentProductImage').src = product.image_url;
+            
+            // Show the modal
+            updateProductModal.show();
+        } else {
+            alert('Product not found!');
+        }
+    }
+    
+    // Fetch all products and initialize the page
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize Bootstrap modal
+        updateProductModal = new bootstrap.Modal(document.getElementById('updateProductModal'));
+        
+        // Fetch products from server
+        fetchProducts();
+        
+        // Event listener for "Select All" checkbox
+        document.getElementById('selectAll').addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.product-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+            updateActionButtons();
+        });
+        
+        // Event delegation for product checkboxes
+        document.querySelector('#productTable tbody').addEventListener('change', function(e) {
+            if (e.target.classList.contains('product-checkbox')) {
+                updateActionButtons();
+                
+                // Update "Select All" checkbox state
+                const allCheckboxes = document.querySelectorAll('.product-checkbox');
+                const checkedCheckboxes = document.querySelectorAll('.product-checkbox:checked');
+                document.getElementById('selectAll').checked = allCheckboxes.length === checkedCheckboxes.length && allCheckboxes.length > 0;
+            }
+        });
+        
+        // Event listeners for pagination buttons
+        document.getElementById('prevBtn').addEventListener('click', function() {
+            if (currentPage > 1) {
+                currentPage--;
+                loadProducts(filteredProducts);
+            }
+        });
+        
+        document.getElementById('nextBtn').addEventListener('click', function() {
+            if (currentPage * productsPerPage < filteredProducts.length) {
+                currentPage++;
+                loadProducts(filteredProducts);
+            }
+        });
+        
+        // Event listener for search button
+        document.getElementById('searchButton').addEventListener('click', searchProducts);
+        
+        // Event listener for search input (search as you type)
+        document.getElementById('searchInput').addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                searchProducts();
+            } else if (e.key === 'Escape') {
+                this.value = '';
+                searchProducts();
+            } else {
+                // Only search if the user has stopped typing for 300ms
+                clearTimeout(this.searchTimeout);
+                this.searchTimeout = setTimeout(searchProducts, 300);
+            }
+        });
+        
+        // Event listener for update button
+        document.getElementById('updateButton').addEventListener('click', function() {
+            const selectedCheckbox = document.querySelector('.product-checkbox:checked');
+            if (selectedCheckbox) {
+                const productId = selectedCheckbox.closest('tr').getAttribute('data-id');
+                populateUpdateModal(productId);
+            }
+        });
+        
+        // Event listener for save changes button in update modal
+        document.getElementById('saveProductChanges').addEventListener('click', function() {
+            updateProduct();
+        });
+        
+        // Event listener for delete button
+        document.getElementById('deleteButton').addEventListener('click', function() {
+            const selectedCheckboxes = document.querySelectorAll('.product-checkbox:checked');
+            if (selectedCheckboxes.length > 0) {
+                if (confirm(`Are you sure you want to delete ${selectedCheckboxes.length} product(s)?`)) {
+                    const productIds = Array.from(selectedCheckboxes).map(checkbox => 
+                        checkbox.closest('tr').getAttribute('data-id')
+                    );
+                    
+                    deleteProducts(productIds);
+                }
+            }
+        });
+    });
+    
+    // Function to fetch products from server
+    function fetchProducts() {
+        fetch('fetch_products.php')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                allProducts = data;
+                filteredProducts = [...allProducts]; // Make a copy for filtering
+                loadProducts(filteredProducts);
+            })
+            .catch(error => {
+                console.error('Error fetching products:', error);
+                alert('Failed to load products. Please try again later.');
+            });
+    }
+    
+   
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    let selectedProductId = null;
+
+    // Enable update button when a row is selected
+    document.querySelector("#productTable tbody").addEventListener("click", function (event) {
+        let row = event.target.closest("tr");
+        if (!row) return;
+
+        // Highlight selected row
+        document.querySelectorAll("#productTable tbody tr").forEach(r => r.classList.remove("table-active"));
+        row.classList.add("table-active");
+
+        // Get product ID from row
+        selectedProductId = row.dataset.productId;
+
+        // Enable buttons
+        document.getElementById("updateButton").disabled = false;
+        document.getElementById("deleteButton").disabled = false;
+    });
+
+    // Handle update button click
+    document.getElementById("updateButton").addEventListener("click", function () {
+        if (!selectedProductId) return;
+
+        fetch("fetch_product.php?id=" + selectedProductId)
+            .then(response => response.json())
+            .then(product => {
+                // Populate form fields
+                document.getElementById("updateProductId").value = product.id;
+                document.getElementById("updateProductName").value = product.product_name;
+                document.getElementById("updateCategory").value = product.category;
+                document.getElementById("updatePrice").value = product.price;
+                document.getElementById("updateStock").value = product.stock;
+                document.getElementById("currentProductImage").src = product.image_url;
+
+                // Show the modal
+                let updateModal = new bootstrap.Modal(document.getElementById("updateProductModal"));
+                updateModal.show();
+            });
+    });
+
+    // Handle save changes button
+    document.getElementById("saveProductChanges").addEventListener("click", function () {
+        let formData = new FormData();
+        formData.append("id", document.getElementById("updateProductId").value);
+        formData.append("product_name", document.getElementById("updateProductName").value);
+        formData.append("category", document.getElementById("updateCategory").value);
+        formData.append("price", document.getElementById("updatePrice").value);
+        formData.append("stock", document.getElementById("updateStock").value);
+
+        let newImage = document.getElementById("updateNewImage").files[0];
+        if (newImage) {
+            formData.append("image", newImage);
+        }
+
+        fetch("update_product.php", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("Product updated successfully!");
+                location.reload();
+            } else {
+                alert("Error updating product: " + data.error);
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    });
+    
+// Delete product
+deleteButton.addEventListener("click", function () {
+        if (!selectedRow) return;
+        const productId = selectedRow.dataset.id;
+        
+        if (!confirm("Are you sure you want to delete this product?")) return;
+        
+        fetch("staff_delete_product.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `id=${productId}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("Product deleted successfully!");
+                selectedRow.remove(); // Remove row from table
+                selectedRow = null;
+                updateButton.disabled = true;
+                deleteButton.disabled = true;
+            } else {
+                alert("Error: " + data.error);
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    });
+});
+
+</script>
+
+<script>
+   
+
+</script>
+
+</body>
+</html>
