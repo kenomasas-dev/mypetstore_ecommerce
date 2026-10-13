@@ -1,0 +1,824 @@
+/* Global styles */
+body {
+    font-family: 'Roboto', sans-serif; /* Modern font */
+    background-color: #f8f9fa;
+    color: #333; /* Dark gray text */
+    line-height: 1.6;
+}
+
+.container {
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    color: #2c3e50; /* Dark blue-gray heading color */
+}
+
+/* Navbar styles */
+.navbar {
+    padding: 1rem 0;
+}
+
+.navbar-brand {
+    font-weight: 800;
+    color: #3498db !important; /* Bright blue brand color */
+}
+
+.navbar-brand img {
+    margin-right: 0.5rem;
+}
+
+.navbar-nav .nav-link {
+    color: #555 !important; /* Darker gray for nav links */
+    padding: 0.75rem 1rem;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link:focus {
+    color: #3498db !important; /* Highlight color on hover/focus */
+}
+
+/* Hero Section */
+.hero {
+    background-image: url('images/hero-image.jpg'); /* Replace with your image */
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+    padding: 120px 0;
+    position: relative;
+    overflow: hidden; /* Clip animations */
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    animation: fadeInUp 1.2s ease-out; /* Animation */
+}
+
+/* Animation keyframes */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #3498db; /* Bright blue */
+    border-color: #3498db;
+    color: #fff;
+    font-weight: 600;
+    padding: 12px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9; /* Darker blue on hover */
+    border-color: #2980b9;
+    transform: translateY(-2px); /* Lift effect on hover */
+}
+
+.btn-outline-primary {
+    color: #3498db;
+    border-color: #3498db;
+    font-weight: 600;
+    padding: 10px 25px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background-color: #3498db;
+    color: #fff;
+}
+
+/* Card styles */
+.card {
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); /* Soft shadow */
+    border-radius: 12px;
+    overflow: hidden; /* Clip rounded corners */
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px); /* Lift effect */
+}
+
+.card-img-top {
+    height: 220px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.card:hover .card-img-top {
+    transform: scale(1.1); /* Zoom on hover */
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.card-text {
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+/* Section padding */
+section {
+    padding: 70px 0;
+}
+
+/* Category Section */
+.category-section {
+    background-color: #ecf0f1; /* Very light gray */
+}
+
+.category-icon {
+    font-size: 48px;
+    color: #3498db; /* Blue icons */
+    margin-bottom: 15px;
+    transition: transform 0.3s ease; /* Icon animation */
+}
+
+.category-card {
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.category-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.category-card:hover .category-icon {
+    transform: scale(1.2); /* Icon zoom on hover */
+}
+
+/* Global styles (Make sure these are included) */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Login Form Styles */
+.login-container {
+    max-width: 450px; /* Increased max-width */
+    margin: 80px auto;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08); /* Deeper shadow */
+}
+
+.login-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2c3e50;
+    font-weight: 700;
+}
+
+.form-label {
+    font-weight: 500;
+    color: #555;
+}
+
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #bdc3c7;
+    padding: 12px 15px;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #3498db;
+    box-shadow: none;
+}
+
+.form-text {
+    color: #777; /* Lighter gray for helper text */
+    font-size: 0.85rem;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+    color: #fff;
+    font-weight: 600;
+    padding: 12px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+.forgot-password {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.forgot-password a {
+    color: #3498db;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.forgot-password a:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
+
+.form-check-label {
+    color: #555;
+}
+
+.login-container{
+    margin-top: 6rem !important;
+}   
+/* Admin/Staff Sidebar */
+#sidebar {
+    width: 270px;
+    background-color: #fff;
+    border-right: 1px solid #ecf0f1;
+    padding-top: 30px;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.04);
+}
+
+#sidebar .text-center img {
+    border-radius: 50%; /* Circular avatar */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+#sidebar .text-center img:hover {
+    transform: scale(1.1); /* Slight zoom on hover */
+}
+
+#sidebar .nav-link {
+    padding: 14px 20px;
+    color: #444;
+    transition: background-color 0.3s ease, padding-left 0.3s ease;
+}
+
+#sidebar .nav-link:hover {
+    background-color: #f0f3f5; /* Subtle hover */
+    padding-left: 25px; /* Indent on hover */
+}
+
+#content {
+    margin-left: 270px; /* Adjust for sidebar */
+    padding: 30px;
+}
+
+/* Existing Sidebar styles */
+#sidebar {
+    width: 270px;
+    background-color: #fff;
+    border-right: 1px solid #ecf0f1;
+    padding-top: 30px;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.04);
+}
+
+#sidebar .text-center img {
+    border-radius: 50%; /* Circular avatar */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+#sidebar .text-center img:hover {
+    transform: scale(1.1); /* Slight zoom on hover */
+}
+
+#sidebar .nav-link {
+    padding: 14px 20px;
+    color: #444;
+    transition: background-color 0.3s ease, padding-left 0.3s ease;
+}
+
+#sidebar .nav-link:hover {
+    background-color: #f0f3f5; /* Subtle hover */
+    padding-left: 25px; /* Indent on hover */
+}
+
+/* Dropdown animations*/
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    padding: 10px 0; /* Add some padding to the top and bottom */
+    margin-top: 5px; /* Slight gap from toggle */
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    display: block;
+    pointer-events: none; /* Makes the dropdown not interactable when hidden */
+}
+
+.dropdown-menu.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto; /* Makes the dropdown interactable when shown */
+}
+/* Staff Order Table */
+.order-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 25px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden; /* Rounded corners for table */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.order-table th, .order-table td {
+    padding: 15px;
+    border: 1px solid #eee;
+    text-align: left;
+}
+
+.order-table th {
+    background-color: #f5f5f5;
+    font-weight: 600;
+    color: #555;
+}
+
+.order-status {
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: 600;
+    color: #fff;
+    display: inline-block; /* Ensure proper alignment */
+}
+
+.status-pending {
+    background-color: #f39c12; /* Amber/warning */
+}
+
+.status-processing {
+    background-color: #3498db; /* Blue */
+}
+
+.status-shipped {
+    background-color: #1abc9c; /* Teal/success */
+}
+
+.status-delivered {
+    background-color: #2ecc71; /* Green */
+}
+
+/* User Profile */
+.profile-container {
+    margin-top: 60px;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.profile-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 30px;
+    border: 4px solid #3498db;
+    transition: transform 0.3s ease;
+}
+
+.profile-image:hover {
+    transform: scale(1.1); /* Slight zoom on hover */
+}
+
+.profile-info h2 {
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: #2c3e50;
+}
+
+.profile-details p {
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.edit-profile-button {
+    background-color: #3498db;
+    border-color: #3498db;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.edit-profile-button:hover {
+    background-color: #2980b9;
+    transform: translateY(-3px); /* Lift effect */
+}
+
+.order-history {
+    margin-top: 40px;
+}
+
+/* Product Detail Page */
+.product-detail-section {
+    padding: 80px 0;
+}
+
+.product-image {
+    width: 100%;
+    max-height: 450px;
+    object-fit: cover;
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+}
+
+.product-image:hover {
+    transform: scale(1.03); /* Subtle zoom */
+}
+
+.product-info {
+    margin-top: 40px;
+}
+
+.product-title {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+.product-price {
+    font-size: 2rem;
+    color: #3498db;
+    margin-bottom: 30px;
+}
+
+.product-description {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 40px;
+}
+
+.quantity-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.quantity-label {
+    margin-right: 20px;
+    font-weight: 600;
+    color: #444;
+}
+
+.quantity-input {
+    width: 90px;
+    border-radius: 8px;
+    padding: 12px;
+    border: 1px solid #bdc3c7;
+    transition: border-color 0.3s ease;
+}
+
+.quantity-input:focus {
+    border-color: #3498db;
+    box-shadow: none;
+}
+
+.add-to-cart-button {
+    background-color: #27ae60; /* Emerald green */
+    border-color: #27ae60;
+    color: #fff;
+    font-weight: 600;
+    padding: 14px 35px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.add-to-cart-button:hover {
+    background-color: #219653; /* Darker green */
+    transform: translateY(-3px); /* Lift effect */
+}
+
+.related-products-section {
+    background-color: #f8f9fa;
+    padding: 80px 0;
+}
+
+.related-products-section h2 {
+    text-align: center;
+    margin-bottom: 50px;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.related-product-card {
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.related-product-card:hover {
+    transform: translateY(-8px);
+}
+
+.related-product-image {
+    height: 250px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.related-product-card:hover .related-product-image {
+    transform: scale(1.1); /* Slight zoom */
+}
+/* Cart */
+.cart-container {
+    margin-top: 50px;
+    background-color: #fff; /* White container */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #dee2e6; /* Light border */
+}
+
+.cart-item img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+.cart-item h5 {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.cart-item p {
+    margin-bottom: 0;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+}
+
+.quantity-controls button {
+    background-color: #fff; /* White button */
+    border: 1px solid #ced4da; /* Light border */
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.quantity-controls button:hover {
+    background-color: #e9ecef; /* Lighter gray on hover */
+}
+
+.cart-summary {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f8f9fa; /* Light gray summary */
+    border-radius: 10px;
+}
+
+.cart-summary h4 {
+    margin-bottom: 20px;
+}
+/*Checkout*/
+.checkout-container {
+    margin-top: 50px;
+    background-color: #fff; /* White container */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.checkout-form h4 {
+    margin-bottom: 20px;
+}
+
+.form-control:focus {
+    border-color: #007bff; /* Blue border on focus */
+    box-shadow: none;
+}
+
+.order-summary h4 {
+    margin-bottom: 20px;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.summary-item span:last-child {
+    font-weight: bold;
+}
+
+.payment-methods {
+    margin-top: 30px;
+}
+
+.payment-methods label {
+    margin-right: 20px;
+}
+/* General Styling enhancements to all pages*/
+section {
+    padding: 4rem 0;
+}
+
+footer {
+    background-color: #343a40;
+    color: #fff;
+    text-align: center;
+    padding: 1.5rem 0;
+}
+
+a {
+    text-decoration: none;
+}
+/* Add more cool style here */
+
+
+#content {
+    margin-left: 250px; /* Adjust for sidebar width */
+    padding: 20px;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle card shadow
+.order-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.order-table th,
+.order-table td {
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    text-align: left;
+}
+
+.order-table th {
+    background-color: #f8f9fa; /* Light gray header */
+    font-weight: bold;
+}
+
+.order-status {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.status-pending {
+    background-color: #ffc107; /* Yellow */
+    color: #212529;
+}
+
+.status-processing {
+    background-color: #007bff; /* Blue */
+    color: white;
+}
+
+.status-shipped {
+    background-color: #17a2b8; /* Cyan */
+    color: white;
+}
+
+.status-delivered {
+    background-color: #28a745; /* Green */
+    color: white;
+}
+.navbar-brand img {
+    margin-right: 0.5rem;
+}
+.form-container {
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+        .card-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.card-column {
+    width: calc(33% - 10px); /* Three cards per row with some spacing */
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+.product-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+}
+
+.product-card img {
+    max-width: 100%;
+    height: auto;
+}
+
+ #content h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #343a40;
+}
+
